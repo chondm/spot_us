@@ -1,0 +1,9 @@
+<% content_for :head do %>
+<% end %>
+
+<% @title = "Spot.us - Fund A Story - CCA" %>
+
+<ul class="storyGrid">
+	<%= render :partial => "shared/lists", 
+		:locals => {:items => @ccas, :template_name => "cca/cca", :no_items_message => "There are no active CCAs. Try again later."} %>
+</ul>

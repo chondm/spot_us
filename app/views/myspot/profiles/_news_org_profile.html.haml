@@ -1,0 +1,13 @@
+.row
+  = f.label :photo, "Your Logo"
+  .float_left= image_tag @profile.photo.url(:thumb), :class => 'thumbnail'
+  .float_left{:style=>"margin-left:10px"}
+    .small{:style=>"margin:0"} Upload a new logo. Photos are 50x50 pixels
+    = f.file_field :photo, :size => 15
+  .clear
+.row
+  = f.label :organization_name
+  = f.text_field :organization_name
+.row
+  = f.label :established_year
+  = f.text_field :established_year

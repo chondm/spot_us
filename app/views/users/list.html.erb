@@ -1,0 +1,25 @@
+<% content_for :head do %>
+	<%= auto_discovery_link_tag(:rss, {:controller => 'users', :action => 'list', :format => 'rss', :filter=>@filter}) %>
+<% end %>
+
+<% @title = "Spot.us - Fund A Story" %>
+
+<ul class="tabs">
+	<li <%if @filter=='donated' || @filter.blank?%>class="current"<%end%>><a href="/contributors/contributors/">Donors</a></li>
+	<li <%if @filter=='donated-most'%>class="current"<%end%>><a href="/contributors/donated-most">Donated Most</a></li>
+	<li <%if @filter=='organizations'%>class="current"<%end%>><a href="/contributors/organizations">Organizations</a></li>
+	<li <%if @filter=='reporters'%>class="current"<%end%>><a href="/contributors/reporters">Reporters</a></li>
+</ul>
+
+<div class="donorsContainer community">
+
+	<ul>
+		<%@items.each do |donation|%>
+			<%supporter = donation.user%>
+			<%=render :partial => "user", :locals => { :user => supporter } if supporter%>
+		<%end%>
+	</ul>
+
+	<%=will_paginate @items%>
+		
+</div>

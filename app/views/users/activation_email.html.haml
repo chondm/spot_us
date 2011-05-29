@@ -1,0 +1,19 @@
+- @title = "Spot.us - Resend Activation E-mail"
+
+.block-padding
+.login-boxer
+  .span-6.or_login
+    %h3 Resend Activation
+    .double_content_border
+    - form_tag resend_activation_user_path, :method => 'post' do
+      .row
+        %label Your E-mail Address
+        %div
+          = text_field_tag 'email', params[:email], :class => 'text'
+      .clear
+      .double_content_border
+      .float_right
+        %input{:type => "image", :src=>"/images/submit.png"}
+  .clear
+.block-padding
+

@@ -1,0 +1,35 @@
+<div style="display:none;" id="loginError">
+	<h2>Sorry about that.</h2>
+	<p>Check below to see what happened:</p>
+	<ul>
+		<li>Was it an invalid E-mail address or password?</li>
+		<li>Have you registered yet? <%= link_to "Register now", "",  :class => 'popup_link show_register_form' %></li>
+	</ul>
+	<p>
+		If you're experiencing a persistent problem, email
+		<%= mail_to 'david@spot.us', nil, :encode => "hex"%>
+		<br/>
+		Seriously, this guy doesn't sleep and he wants the site to work for you!!!
+	</p>
+</div>
+<div class="row">
+    <label>Your E-mail Address</label>
+    <div class="login">
+      <%= text_field_tag "email", nil, :class=>"text" %>
+    </div>
+</div>
+
+<div class="row">
+    <label>Your Password</label>
+    <div class="login">
+      <%= password_field_tag "password", nil, :class=>"text", :id=>"passwordField" %>
+      <%= hidden_field_tag "encoded_password", nil, :class=>"text", :id=>"passwordHiddenField" %>
+    </div>
+</div>
+<div class="row">
+   <%= check_box_tag 'remember_me', '1', false, :class => "float-left" %>
+   <label>Remember Me</label>
+   <%= link_to "Forgot Password?", password_user_path, :class => "forgot_password" %> | 
+</div>
+    
+  

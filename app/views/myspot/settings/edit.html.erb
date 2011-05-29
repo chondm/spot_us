@@ -1,0 +1,50 @@
+<% @title = "Spot.us - Settings" %>
+
+<%= render :partial => "myspot/nav", :locals => {:selected_tab => "settings"} %>
+<% unless @settings.errors.empty? %>
+	<% content_for :error do %>
+		<%= error_messages_for_resource %>
+	<% end %>
+<% end %>
+<h2>Settings</h2>
+<div class="formContainer">
+	<div class="formBody">
+		<% form_for :settings, :url => myspot_settings_path, :html => { :method => :put, :class => "form" } do |f| %>
+			<div class="row clearfix">
+				<%= f.label :email, 'Email Address' %>
+				<%= f.text_field :email %>
+			</div>
+			<div class="row">
+				<%= f.label :password, 'New Password' %>
+				<%= f.password_field :password %>
+			</div>
+			
+			<div class="row">
+				<%= f.label :password_confirmation, 'Confirm New Password' %>
+				<%= f.password_field :password_confirmation %>
+			</div>
+
+			<div class="row">
+				<%= f.label     :notify_blog_posts,  "Notify Me Of New Blog Posts" %>
+				<%= f.check_box :notify_blog_posts, :class => "normalCheckBox" %>
+			</div>
+			
+			<div class="row">
+				<%= f.label     :notify_comments,  "Notify Me Of New Comments" %>
+				<%= f.check_box :notify_comments, :class => "normalCheckBox" %>
+			</div>
+			<% if @settings.is_a?(Reporter) || @settings.is_a?(Organization) || @settings.is_a?(Sponsor) %>
+				<div class="row">
+					<%= f.label :phone, 'Phone Number' %>
+					<%= f.text_field :phone %>
+					<br /><span class='small quieter'>Private</span>
+				</div>
+			<% end %>
+			<div class="row">
+				<%=get_button("Save")%>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+

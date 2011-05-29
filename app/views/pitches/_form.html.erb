@@ -1,0 +1,216 @@
+<% content_for :head do %>
+	<script>
+		jQuery(document).ready(function($){
+			$("#toggleDivs").click(function(){
+				$('div[id*=toggle_div]').slideToggle(600);
+				return false;
+			});
+		});
+	</script>
+<% end %>
+<% form_for(@pitch, :html => { :multipart => true }) do |f| %>
+<div class="formContainer">
+	<div class="formBody">
+		<%=yield :error%>
+		<div class="row top">
+			<h2 class="top">Basics</h2>
+			<%= f.label     :headline, "Headline <span class='required'>
+					*
+				</span> <a href='#' rel='nofollow' id='hoverAnchorHeadline'><img src='/images/new/help.png'></a>" %>
+			<%= f.text_field :headline, :value => @pitch && @pitch.headline ? @pitch.headline : TEXT[:headline], :onclick => "clear_text('headline', '#{TEXT[:headline]}')", 
+			:class => @pitch && @pitch.headline ? "" : "gray_text", :id => "headline" %>
+		</div>
+		<div class="row top">
+			<%= f.label     :slug, "Slug <span class='required'>
+					*
+				</span> <a href='#' rel='nofollow' id='hoverAnchorSlug'><img src='/images/new/help.png'></a>" %>
+			<%= f.text_field :slug %>
+		</div>
+		<div class="row">
+			<%= f.label :excerpt, "Overview &amp; Elevator Pitch <span class='required'>
+					*
+				</span> <a href='#' rel='nofollow' id='hoverAnchorSummary'><img src='/images/new/help.png'></a>" %>
+			<%= ckeditor_textarea("pitch", "excerpt", :toolbar => 'Simple', :width => '450px', :height => '75px') %>
+		</div>
+		<div class="row">
+			<%= f.label :short_description, "Long Description <span class='required'>
+					*
+				</span> <a href='#' rel='nofollow' id='hoverAnchorShortDescription'><img src='/images/new/help.png'></a>" %>
+			<%= ckeditor_textarea("pitch", "short_description", :toolbar => 'Medium', :width => '450px', :height => '125px') %>
+		</div>
+		<% if APP_CONFIG[:has_networks] || (current_user && current_user.admin?)%>
+		<div class="row">
+			<%= render :partial => 'shared/network', :locals => {:f => f, :instance => @pitch} %>
+		</div>
+		<% end %>
+		<div class="row">
+				<%= f.label :topics, "Topics <span class='required'>
+						*
+					</span> <a href='#' rel='nofollow' id='hoverAnchorTopics'><img src='/images/new/help.png'></a>" %>
+			<div class="sites">
+				<%= topic_check_boxes(@pitch) %>
+			</div>    
+		</div>
+		<h2>Qualifications</h2>
+		<div class="row">
+			<%= f.label :skills, "Reporter Qualifications <a href='#' rel='nofollow' id='hoverAnchorQualifications'><img src='/images/new/help.png'></a>" %>
+			<%= ckeditor_textarea("pitch", "skills", :toolbar => 'Medium', :width => '450px', :height => '125px') %>
+		</div>
+		<h2>Costs &amp; Deliverables</h2>
+		<div class="row">
+				<%= f.label :requested_amount, "Requested Amount <span class='required'>
+						*
+					</span> <a href='#' rel='nofollow' id='hoverAnchorRequestedAmount'><img src='/images/new/help.png'></a>" %>
+			<%= f.text_field :requested_amount, :maxlength => 15, :size => 15 %>
+		</div>
+		<div class="row">
+			<%= f.label :delivery_description, "Deliverables <a href='#' rel='nofollow' id='hoverAnchorDelivery'><img src='/images/new/help.png'></a>" %>
+			<div class="sites">
+				Text
+				<%= f.check_box :deliver_text %>
+				Audio
+				<%= f.check_box :deliver_audio %>
+				Video
+				<%= f.check_box :deliver_video %>
+				Photos
+				<%= f.check_box :deliver_photo %><br/>
+			</div>
+		</div>
+		<div class="row">
+			<%= f.label :delivery_description, "Deliverables description <a href='#' rel='nofollow' id='hoverAnchorDeliveryDescription'><img src='/images/new/help.png'></a>" %>
+			<div class="rte">
+				<%= ckeditor_textarea("pitch", "delivery_description", :toolbar => 'Medium', :width => '450px', :height => '150px') %>
+			</div>
+		</div>
+		<h2>Media</h2>
+		<div class="row add_media">
+			<label>Add Image <span class='required'>
+				*
+			</span> <a href='#' rel='nofollow' id='hoverAnchorUploadMedia'><img src='/images/new/help.png'></a>
+				      
+			</label>
+			<%= f.file_field :featured_image %><br/>
+			<span class='required'> JPEG, PNG and GIF's less than 5 MB.</span>
+		</div>
+		<div class="row">
+			<%= f.label :video_embed, "Embed a Video <a href='#' rel='nofollow' id='hoverAnchorVideoEmbed'><img src='/images/new/help.png'></a>", :class => "small" %>
+			<%= f.text_area :video_embed, :rows => 4 %>
+		</div>
+		<div class="row">
+			<%= f.label :expiration_date, "Editorial Deadline		<span class='required'>
+					*
+				</span> <a href='#' rel='nofollow' id='hoverAnchorDeadline'><img src='/images/new/help.png'></a>" %>
+			<%= f.date_select :expiration_date, :include_blank => true, :default => nil, :start_year => Time.now.year %>
+		</div>
+
+		<!-- START OPTIONAL FIELDS -->
+		<h2>Optional</h2>
+		<div class="row optional">
+			<span id='toggleDivs' class='spanLink'>Toggle here to hide/show the optional fields</span>  
+		</div>
+		<div class="row" id="toggle_div_how_will_it_help" style="display:none;">
+			<%= f.label :extended_description, "Justification <a href='#' rel='nofollow' id='hoverAnchorJustification'><img src='/images/new/help.png'></a>" %>
+			<%= ckeditor_textarea("pitch", "extended_description", :toolbar => 'Medium', :width => '450px', :height => '125px') %>
+		</div>
+		<div class="row" id="toggle_div_disclosure" style="display:none;">
+			<%= f.label :disclosure, "Disclosure <a href='#' rel='nofollow' id='hoverAnchorDisclosure'><img src='/images/new/help.png'></a>" %>
+			<%= ckeditor_textarea("pitch", "disclosure", :toolbar => 'Medium', :width => '450px', :height => '125px') %>
+		</div>
+		<div class="row" id="toggle_div_caption" style="display:none;">
+			<%= f.label :featured_image_caption, "Image Caption <a href='#' rel='nofollow' id='hoverAnchorImageCaption'><img src='/images/new/help.png'></a>" %>
+			<%= f.text_area :featured_image_caption, :rows => 2 %>
+		</div>
+		<div class="row" id="toggle_div_keywords" style="display:none;">
+			<%= f.label :keyword, "Keywords <a href='#' rel='nofollow' id='hoverAnchorKeywords'><img src='/images/new/help.png'></a>" %>
+			<%= f.text_area :keywords, :rows => 3 %>
+		</div>
+		<!-- END OPTIONAL FIELDS -->
+
+		<div class="row contract">
+			<%= f.check_box :contract_agreement %> &nbsp;
+			<%= f.label :contract_agreement, %Q(I agree with the #{link_to "Reporter's Contract", page_path('reporter_contract', {:only_path=>false}), {:class => "quieter", :rel=>"facebox"}} (independent contractor agreement, please read).) %>
+		</div>
+		<div class="row">
+			<% if @pitch.new_record? %>
+				<%= get_button("Create a Pitch") %>
+			<% else %>
+				<%= get_button("Save") %>
+				<%= get_button("Cancel", {:onlick=>"document.href='/';"}) %>
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+</div>
+
+<% content_for :bottom do %>
+	<!-- START - hover list of helpers -->
+	<ul class='hoverContainer helper' id='hoverContainerHeadline' style="display:none;">
+		<h3>Keep it concise</h3>
+		In a few words, tell us what your pitch is about
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerSlug' style="display:none;">
+		<h3>Keep it very concise</h3>
+		In a few words selling words with a maximum of 30 characters, tell us what your pitch is about. 
+		We will use this slug for all list views instead of the headline.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerSummary' style="display:none;">
+		<h3>Sell the story with a 250 words overview!</h3>
+		Why would someone donate to see the final story? What are the details? Be concise and sell the story. 
+		We use this summary for the Summary page for all pitches. Think like you are in a bar or cafe quickly
+		explaining your story. Make people excited to see your future story.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerShortDescription' style="display:none;">
+		<h3>Sell the story!</h3>
+		Why would someone care? What are the details?
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerTopics' style="display:none;">
+		<h3>What's it all about?</h3>
+		Help us categorize your story by signifying which categories it falls into. 
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerQualifications' style="display:none;">
+		<h3>Do you have the skills/access to report this story?</h3>
+		Tell us who you are and why we should support you.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerUploadMedia' style="display:none;">
+		<h3>Convey it visually</h3>
+		A picture's worth a thousand words! Please upload a featured image for your post.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerVideoEmbed' style="display:none;">
+		<h3>Multimedia goodness</h3>
+		If you want, you can include a video. Just paste your third-party embedded code here.
+		We can only take Vimeo or YouTube at this time.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerDeadline' style="display:none;">
+		<h3>Name the date!</h3>
+		How much time do you want to give for fundraising? Set a deadline. 
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerJustification' style="display:none;">
+		<h3>How will your story help?</h3>
+		Is there a gap your coverage is filling? A greater cause you can serve? Tell us how. 
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerRequestedAmount' style="display:none;">
+		<h3>How much will this project cost?</h3>
+		<a href="" id="help_pricing-for-stories">Suggested pricings for work!</a> 
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerDelivery' style="display:none;">
+		<h3>What will be delivered?</h3>
+		Check the boxes for the kinds of content you'll be providing.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerDeliveryDescription' style="display:none;">
+		<h3>Tell us more.</h3>
+		Provide some details on what you will produce. Justify your pricing.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerDisclosure' style="display:none;">
+		<h3>Lay it all out</h3>
+		Here you may disclose any relationships or similar.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerImageCaption' style="display:none;">
+		<h3>Can we get some context?</h3>
+		Add a featured image caption with 200 character maximum.
+	</ul>
+	<ul class='hoverContainer helper' id='hoverContainerKeywords' style="display:none;">
+		<h3>Tag it up, yo!</h3>
+		Please include keywords, or tags. They should be separated by commas. For example: "car, automobile, suvs."
+	</ul>
+	<!-- END - hover list of helpers -->
+<% end %>

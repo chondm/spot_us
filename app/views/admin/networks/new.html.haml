@@ -1,0 +1,16 @@
+= content_for :head do
+  :javascript
+    $(function(){
+      $(".admin_tab").removeClass("hilited");
+      $("#networks_tab").addClass("hilited");
+    });
+
+= render :partial => "/admin/admin_header"
+
+%h1 New Network
+.flash.error
+  = error_messages_for :network
+- form_for([:admin, @network]) do |f|
+  = render :partial => 'form', :locals => {:f => f, :network => @network}
+
+  = f.submit

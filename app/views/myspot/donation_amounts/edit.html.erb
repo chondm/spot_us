@@ -1,0 +1,161 @@
+<% @title = "Spot.us - Fund Your Donations" %>
+
+<% content_for :head do %>
+
+	<% javascript_tag do %>
+
+		jQuery(window).bind('beforeunload', function() {
+			if(jQuery('#navigate_away').val()=='true'){
+				return "You haven't completed the donation process. Are you sure you want to leave?";
+		 	}
+		});
+
+		jQuery(document).ready(function(){
+			
+			jQuery('#purchase').click(function(){
+				jQuery('#navigate_away').val('false');
+			});
+			
+			jQuery('a[id*=removeDonation]').click(function(){
+				jQuery('#navigate_away').val('false');
+			});
+			
+			jQuery('#apply_credits').click(function(){
+				jQuery('#navigate_away').val('false');
+			});
+			
+			jQuery("form#donation_amounts").submit(function(){
+				if(jQuery("#purchase").css("display") != "none") {
+					jQuery("#loading_status").fadeIn(50);
+					jQuery.post(jQuery(this).attr("action"), jQuery(this).serialize(), function(result){
+						jQuery("#loading_status").hide();
+						jQuery.facebox(result);
+						return false;
+					}, "script");
+					return false;
+				}
+			});
+			
+			jQuery('#remove_spotus_donation').click(function(){
+				jQuery('#navigate_away').val('false');
+				jQuery('input#spotus_donation').remove();
+				jQuery('#support_spotus').hide();
+				getTotalAmounts(true);
+				return false;
+			});
+
+			jQuery('select.invisible').val('');
+
+			jQuery('a.show_group_selector').toggle(function(){
+				jQuery(this).next("select").removeClass("invisible").focus().next("em").removeClass("invisible");        
+			},function(){
+				jQuery(this).blur().next("select").val('').addClass("invisible").next("em").addClass("invisible");
+			});
+		
+			getTotalAmounts(true);
+		
+			jQuery('input.line_item').change(function(){
+				getTotalAmounts(true);
+			});
+			jQuery('input#spotus_donation').change(function(){
+				getTotalAmounts(false);
+			});		
+		});
+	<% end %>
+<% end %>
+
+<% if @donations && @donations.any?(&:errors) %>
+	<% content_for :error do %>
+		<%= error_messages_for :donations, :object => @donations %>
+	<% end %>
+<% end %>	
+<div id="donationAmounts" class="donationAmounts">
+	<h2> Almost done! One more step:</h2>
+	<h3>You can contribute more by adjusting the amounts below.</h3>
+    <% if unpaid_donations.any? %>
+		<h4>Fund Your Donations</h4>
+    <% end %>   
+    <% form_tag myspot_donations_amounts_path, :method => :put, :class=>"", :id => "donation_amounts" do %>
+       <ul>
+        <li>
+ 		<% unpaid_donations.each do |donation| %>
+            <% content_tag_for :li, donation, :class => 'unpaid' do %>            
+  			<%= link_to image_tag(donation.pitch.featured_image.url(:thumb)), donation.pitch %>
+				<div>
+		              $ <%= text_field_tag "donation_amounts[#{donation.id}][amount]", number_to_currency(donation.amount, :delimiter => '', :unit => ''), :size => 6, :id => "donation_amounts_#{donation.id}_amount", :style => "text-align:right;", :donation_id => donation.id, :class => "line_item" %>
+
+		                     <%= link_to "Remove", myspot_donation_url(donation), :method => :delete, :confirm => "Are you sure you'd like to remove this donation of #{number_to_currency(donation.amount)}?", :id=>"removeDonation#{donation.id}" %>
+
+		               </div>
+					<h5>PITCH: <%= link_to donation.pitch.headline, donation.pitch %></h5>
+                  <p>
+                     <%= strip_html truncate_words(donation.pitch.short_description,20) %>
+                     <%= link_to 'Read More &rarr;', donation.pitch %>
+                  </p>
+		</li>
+            <% end %>
+         <% end %>
+         </ul>
+        <% if unpaid_credits.any? %>
+          <h4>Apply Credits</h4>
+          <ul>
+              <% unpaid_credits.each do |credit_pitch| %>
+                <% content_tag_for :li, credit_pitch, :class => 'unpaid' do %>
+                   <li>
+ 					<%= link_to image_tag(credit_pitch.pitch.featured_image.url(:thumb)), credit_pitch.pitch %>
+                       <div>
+                        $ <%= text_field_tag "credit_pitch_amounts[#{credit_pitch.id}][amount]", number_to_currency(credit_pitch.amount, :delimiter => '', :unit => ''), :size => 6, :id => "credit_pitch_amounts_#{credit_pitch.id}_amount", :style => "text-align:right;", :class => "line_item" %>
+                           <%= link_to "Remove", myspot_donation_path(credit_pitch), :method => :delete, :confirm => "Are you sure you'd like to remove this credit of #{number_to_currency(credit_pitch.amount)}?", :id=>"removeDonation#{credit_pitch.id}" %>
+                    </div>
+							<h5>PITCH:
+                           <%= link_to credit_pitch.pitch.headline, credit_pitch.pitch %>
+                        </h5>
+                        <p>
+                           <%= strip_html truncate_words(credit_pitch.pitch.short_description, 20) %>
+                           <%= link_to 'Read More &rarr;', credit_pitch.pitch %>
+                        </p>
+                    </li>
+               <% end %> 
+            <% end %>
+            </ul>
+         <% end %>
+         <h4>Extra</h4>
+         <ul>
+            <li id="support_spotus">
+                  <h3>Support Spot.Us</h3>
+				<div>
+	                  $ <%= text_field_tag "spotus_donation_amount", number_to_currency(spotus_donation.amount, :unit => ''), :size => 5, :id => "spotus_donation", :style => "text-align:right;", :disabled=>true %>
+						<%= hidden_field_tag "spotus_donation_amount_hidden", number_to_currency(spotus_donation.amount, :unit => ''), :size => 5, :id => "spotus_donation_hidden", :style => "text-align:right" %>
+	               </div>  
+				<p>
+					We are a nonprofit and this money goes to support our overhead such as credit card fees to process your contribution.
+                  </p>
+            </li>
+         </ul>
+		<% if current_user.total_credits > 0 %>
+         <ul>
+            <li id="support_spotus">
+                  <h4>Your available credits</h4>
+               <div>
+				 - $<span id="spotus_credit_amount"><%=number_to_currency(current_user.total_credits, :unit => '')%></span>
+               </div>
+            </li>
+         </ul>
+		<%end%>
+		<ul>
+            <li class="total">
+               <div>
+                  <span id="spotus_total_amount">-</span>
+               </div>
+<h3>Total:</h3>
+            </li>
+         </ul>
+      <div>
+		<%= hidden_field_tag "navigate_away", true, :id => "navigate_away" %>
+        <%= image_submit_tag 'apply_credits_checkout.png', :alt => 'Apply Credits', :name =>"submit", :value => "apply_credits", :id=>"apply_credits" %> 
+		<%= image_submit_tag 'purchase.png', :alt => 'Purchase', :name =>"submit", :value => "purchase", :id=>"purchase" %>
+      </div>
+	
+  <% end %>
+</div>
+<div id="loading_status">One sec ... <%= image_tag("/images/new_design/grey_status_ball.gif") %></div>

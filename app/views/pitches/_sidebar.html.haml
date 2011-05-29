@@ -1,0 +1,34 @@
+.span-160.box_white
+  %h3 Got an Idea?
+  .double_content_border
+  %p If you've got an idea, but no ability to execute on it, create a Tip instead. Your Tip will be public to the community and other journalists can chase down your idea.
+  .double_content_border
+  .centered
+    = link_to image_tag('create_a_tip.png'), new_tip_path
+  .create_tip_spacer
+  .block-spacer-negative
+  %h3 Common Questions
+  .double_content_border
+  %h4.title Building a Pitch?
+  %p.alt-spotus
+    You are about to build a pitch! Traditionall you would pitch an editor. But through Spot.Us you 
+    can pitch the public because now they have a freelance budget. Fill out the fields in this form, 
+    including an image and caption.
+    == #{link_to "Check our FAQ for for reporters", page_path("about") + "#faq_reporter"},
+
+  %h4.title How Much Should I ask for?"
+  %br/ 
+  %p.alt-spotus
+    Please see our 
+    == #{link_to "Reporters Agreement", page_path("reporter_agreement")},
+    This is filled with suggestions on how much you can ask for and what is expected of you as a reporter on
+    Spot.Us.
+
+  %h4.title What happens next?
+  %p.alt-spotus 
+    We fundraise - and you start blogging! It won't be easy, but when it's done, you'll be reporting
+    on a pitch you crafted working directly for the public. If you have questions along the way,
+    don't hesitate to contact us.
+    = mail_to "david@spot.us", nil, :encode => "hex"
+    
+    

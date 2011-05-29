@@ -1,0 +1,88 @@
+<% content_for :head do %>
+	
+	<%if @cca.embed_code && @cca.length_of_video.to_i>0%>
+		<script>
+		    jQuery(document).ready(function($){
+				$("#countDownCca").countdown({until: +<%=@cca.length_of_video.to_i%>, layout: "{sn}", onExpiry: showForm});
+		    });
+	
+			function showForm(){
+				jQuery("#surveyTitle").show();
+				jQuery("#surveyForm").show();
+				jQuery("#countDownWrapper").html("You can now take the survey!");
+			}
+		</script>
+	<%end%>
+	
+<% end %>
+
+<% @title = "Spot.us - Community Centered Advertising" %>
+
+<% if @cca.errors.any? %>
+	<div class="error">
+		<%= error_messages_for :cca %>
+	</div>
+<% end %>
+
+<div class="surveyPageContainer">
+	<% if @cca %>
+		<div class="sponsorImageContainer">
+			<%= image_tag(@cca.banner.url(:large_banner)) if @cca.banner? %>
+		</div>
+	<div class="ccaHowContainer" id="ccaHow">
+		<span class="close"><img src="/images/new/ccax.png" onclick="$('#ccaHow').hide();return false;"></span>
+		<h2>How community-centered sponsorships work</h2>
+		<ul>
+			<li class="engage"><span>1.</span> Engage with this activity from our sponsor.</li>
+			<li class="accumulate"><span>2.</span> Accumulate credits to donate.</li>
+			<li class="apply"><span>3.</span> Apply your free credits to any story.</li>
+		</ul>
+	</div>
+		<div class="surveyContainer">
+			<div class="surveySidebar">
+				<%= render :partial => "fund_this" if params[:pitch_id]%>
+				<%= render :partial => "sponsor_info" %>
+			</div>
+
+			<div class="surveyBody">
+				<%= @cca.description.strip_double_spaces %> 
+				<%if @cca.embed_code && @cca.length_of_video.to_i>0%>
+					<div clas="videoEmbed">
+						<div style="width:590px;margin-right:10px; font-style:bold; color:#333;text-align:right; padding:4px;" id="countDownWrapper">
+							<span id="countDownCca" ></span> seconds left of the video
+						</div>
+						<%= transform_embed_code(@cca.embed_code, 590, 320) %> 
+					</div>
+				<%end%> 
+				<h2 <%if @cca.embed_code && @cca.length_of_video.to_i>0%>style="display:none;"<%end%> id="surveyTitle">Questionnaire</h2>
+				<div class="formContainer" <%if @cca.embed_code && @cca.length_of_video.to_i>0%>style="display:none;"<%end%> id="surveyForm">
+					<div class="formBody">
+						<% if current_user && @cca.survey_completed?(current_user) %>
+							<h2>You have completed this survey. Thank you.</h2>
+						<% elsif @cca.is_maxed_out? %>
+							<h2>This survey has finished.</h2>
+						<% else %>
+							<%= render :partial=>'item' %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	<% else %>
+		<h3>Spot.Us Sponsorship</h3>
+		<p>We do not have any active sponsorship surveys. Are you interested in making one? Please contact <a href='mailto:info@spot.us'>info@spot.us</a> and
+		we will tell you how you can get one live here.</p>
+	<% end %>
+</div>
+<%unless current_user%>
+	<script>
+		jQuery(document).ready(function($){
+			jQuery.facebox({ajax:"/sections/cca"});
+		});
+	</script>
+<%end%>
+
+
+<%if false%>
+	<%# apply_fragment ['cca_detail_', @cca, params[:pitch_id]] do %>
+<%end%>

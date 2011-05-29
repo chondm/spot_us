@@ -1,0 +1,40 @@
+- @title = "Spot.us - #{h @post.title} - Pitch: #{h @post.pitch.headline}"
+
+.block-spacer
+#equalize
+  .span-455.box_white
+    %h2.headline
+      %strong= h @post.title
+    .tweet_meme
+      = javascript_tag "tweetmeme_source = 'spotus';"
+      = javascript_include_tag "http://tweetmeme.com/i/scripts/button.js"
+    .double_content_border
+    = render :partial => 'shared/user', :locals => { :user => @post.user }
+    .double_content_border.clear
+    %h2.headline
+      Related pitch
+    .pitch_summary.clearfix
+      .float-left
+        = link_to image_tag(@post.pitch.featured_image.url(:thumb)), pitch_url(@post.pitch)
+      %h2
+        = link_to @post.pitch.headline, pitch_url(@post.pitch)
+    .block-spacer-negative
+    .double_content_border
+    = transform_embed_code(@post.body, 520, 320) 
+    .double_content_border
+    = transform_embed_code(@post.media_embed, 520, 320)
+  .span-220.column_v.box_white
+    = render :partial => "donations/button", :locals => { :news_item => @post.pitch }
+    .block-spacer-negative
+    .subscribe_via_rss
+      = link_to image_tag('rss_16.png'), "#{pitch_path(@post.pitch)}/posts.rss"
+      = link_to 'Subscribe to this blog', "#{pitch_path(@post.pitch)}/posts.rss"
+    - if @post.pitch.postable_by?(current_user)
+      = link_to image_tag('edit_in_red.png'), edit_pitch_post_path(@post.pitch, @post)
+    = render :partial => 'pitches/posts', :locals => {:pitch => @post.pitch}
+    .block-spacer-negative
+    = render :partial => 'pitches/keywords', :locals => {:pitch => @post.pitch}
+  .span-160.box_white
+    = render :partial => "news_items/organizational_supporters", :locals => {:news_item => @post.pitch}
+    = render :partial => "pitches/group_supporters", :locals => {:news_item => @post.pitch}
+    = render :partial => "pitches/supporters", :locals => {:news_item => @post.pitch}

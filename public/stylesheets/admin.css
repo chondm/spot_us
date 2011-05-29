@@ -1,0 +1,88 @@
+/* top admin menu */
+
+.hideShowEmbeddedAdminMenu{
+	border-top:2px solid #ccc;
+	border-bottom:2px solid #ccc;
+	text-transform:capitalize;
+	margin-left:0px;
+	padding-bottom:4px;
+	width:100%;
+	padding-top:3px;
+	background:#f9f9f9;
+	color:#666;
+	cursor:pointer;
+	font-size:11px;
+}
+
+.hideShowEmbeddedAdminMenu span{
+	padding-left:5px;
+	text-align:right;
+	width:300px;
+}
+
+.embeddedAdminMenu{
+	font-size:9px;
+	padding:10px 0px;
+	width:100%;
+	background:#f9f9f9;
+	border-bottom:2px solid #ccc;
+}
+
+.embeddedAdminMenu h4{
+	font-size:12px;
+	border:none;
+	border-bottom:1px solid #999;
+	background:none;
+	width:905px;
+	cursor:pointer;
+}
+
+.embeddedAdminMenu .adminMenu, .embeddedAdminMenu .subAdminMenu{
+	margin: 5px 5px 0px 5px;
+	list-style-type:none;
+}
+
+.embeddedAdminMenu .adminMenu li, .embeddedAdminMenu .subAdminMenu li, 
+	.embeddedAdminMenu .subAdminMenu .adminMenuSpace, .embeddedAdminMenu .subAdminMenu .adminMenuSpacerLarge {
+	display:inline;
+	padding: 0px 5px 0px 5px;
+}
+
+.embeddedAdminMenu .subAdminMenu .adminMenuSpacerLarge{
+	padding: 0px 10px 0px 10px;
+	margin-left:10px;
+}
+
+.embeddedAdminMenu .adminMenu li, .embeddedAdminMenu .subAdminMenu li{
+	font-size:10px;
+	cursor:pointer;
+	text-transform:capitalize;
+	background:#fff;
+}
+
+.embeddedAdminMenu .subAdminMenu{
+	border:1px solid #999;
+	margin-top:1px;
+	padding:7px 5px 5px 5px;
+	background:#fff;
+}
+
+.embeddedAdminMenu .subAdminMenu .preMenu{
+	font-weight:bold;
+	padding-right:10px;
+}
+
+.embeddedAdminMenu .adminMenu li{
+	font-size:10px;
+	border:1px solid #999;
+	padding:5px 4px;
+	margin-right:4px;
+	color:#999;
+}
+
+.embeddedAdminMenu .adminMenu .active{
+	border-bottom:1px solid #fff;
+	color: #333;
+}
+
+/* end admin menu*/

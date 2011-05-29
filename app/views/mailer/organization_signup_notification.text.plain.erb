@@ -1,0 +1,24 @@
+Dear <%=@user.first_name%>,
+
+Thank you for your interest in joining Spot.Us.  We apologize for the
+slight delay that you will experience in getting this status.
+
+That is because news organizations are given special privileges on our
+site, like the ability to donate large amounts towards pitches, and we
+want to ensure that this ability is given to organizations that uphold
+the ethics of journalism as described by the Society of Professional
+Journalists.
+
+To help us in this effort - please send an email to info@spot.us with
+some additional information about your news organization. Once we receive
+this and have a chance to look over your site we will move forward and get you
+up and running on Spot.Us!!!
+
+This usually takes less than 24 hours. It's even faster if you email info@spot.us
+
+If you want - feel free to sign up as a "citizen" or "reporter," but use a different email address.
+
+Sincerely,
+Spot.Us Team - David Cohn
+
+<%= render :partial=>"footer", :locals=>{ :email=>@user.email }%>

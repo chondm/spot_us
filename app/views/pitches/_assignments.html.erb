@@ -1,0 +1,17 @@
+<% if pitch.assignments.status_open.any? %>
+	<% pitch.assignments.status_open.first(5).each do |assignment| %>
+		<% apply_fragment ['pitch_assignment_alt_', pitch, assignment] do %>
+		<ul>
+		<div class="dateCircle">
+			<span><%= short_date(assignment.created_at) %></span>
+		</div>   		
+		<li><h2><%= link_to h(assignment.title) + " &rarr;", pitch_assignment_path(pitch, assignment) %></h2>
+			<p>	<%= truncate_words(strip_tags(assignment.body), 30) %></P>
+   			<%= link_to "read and apply &rarr;", pitch_assignment_path(assignment.pitch, assignment)%>
+</li></ul>
+		<% end %>
+	<% end %>
+	<% if pitch.has_more_assignments_than(5) || (current_user and pitch.user == current_user) %>
+		<%= link_to "View all &rarr;", pitch_assignments_path(pitch) %>
+	<% end %>
+<% end %>

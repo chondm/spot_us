@@ -1,0 +1,104 @@
+<%content_for :head do%>
+	<script>
+		var RecaptchaOptions = {
+			theme : 'clean'
+		};
+	</script>
+<%end%>
+<div class="loginForms">
+
+	<div class="formContainer login">
+		<% form_tag session_url(:protocol => 'http') do %>
+			<div class="formBody">
+				<h2>Returning users login</h2>
+				<div class="row">
+					<%=yield :error%>
+				</div>
+				<div class="row">
+					<label>Your E-mail Address</label>
+					<div class="login">
+						<%= text_field_tag "email", nil, :class=>"text" %>
+					</div>
+				</div>
+				<div class="row">
+					<label>Your Password</label>
+					<div class="login">
+						<%= password_field_tag "password", nil, :class=>"text", :id=>"passwordField" %>
+						<%= hidden_field_tag "encoded_password", nil, :class=>"text", :id=>"passwordHiddenField" %>
+					</div>
+				</div>
+				<div class="row">
+					<label> </label>
+					<div class="leftCheckbox"><%= check_box_tag 'remember_me', '1' %> </div>
+					<span class="small">Remember Me</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+					<%= link_to "Forgot Password?", password_user_path, :class => "forgot_password" %>
+				</div>
+				<div class="row">
+					<%= get_button("Log in", {:onclick => "processLoginForm();"}) %>
+				</div>
+			</div>
+		<%end%>
+	<!--end login-->
+	</div>
+	
+	<div class="formContainer register">
+		<% if @user && @user.errors.any? %>
+			<div class="error">
+				<%= error_messages_for :user %>
+			</div>
+		<% end %>
+		<% form_for(:user, @user, :url => user_path, :html => {:class => 'register'}) do |f| %>
+			<div class="formBody">
+				<div class="joinBadge">
+					Join!
+				</div>
+				<h2>New users register</h2>
+				<div class="row">
+					<div class="halfRow">
+						<%= f.label :first_name, "Your First Name" %>
+						<%= f.text_field :first_name, :style=>"width:150px;", :tabindex => 1 %>
+					</div>
+					<div class="halfRow">
+						<%= f.label :last_name, "Your Last Name" %>
+						<%= f.text_field :last_name, :style=>"width:150px;", :tabindex => 2 %>
+					</div>
+				</div>
+				<div class="row">
+					<div class="halfRow">
+						<%= f.label :password %>
+						<%= f.password_field :password, :style=>"width:150px;", :tabindex => 3 %>
+					</div>
+					<div class="halfRow">
+						<%= f.label :password_confirmation, "Confirm Password" %>
+						<%= f.password_field :password_confirmation, :style=>"width:150px;", :tabindex => 4 %>
+					</div>
+				</div>
+				<div class="row">
+					<%= f.label :email, "Your E-mail Address" %>
+					<%= f.text_field :email, :tabindex => 5 %>
+				</div>
+				<div class="row">
+					<%= f.label :type, "I am a" %>
+					<%= f.select :type, [["Community Member", "Citizen"], ["Reporter", "Reporter"], ["News Publisher", "Organization"]] %>
+				</div>
+				<div class="row">
+					<div class="leftCheckbox">
+						<%= f.check_box :terms_of_service, {}, '1', '0' %>
+						Accept the <%= link_to 'Terms of Service', page_path('terms') %>
+					</div>
+				</div>
+				<div class="row">
+					<label>Are you human?
+					</label>
+					<%= recaptcha_tags %>
+				</div>
+				<div class="row">
+					<div>
+						<%= submit_tag "Register", {:class => 'submitButton'} %>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+
+</div>

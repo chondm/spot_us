@@ -1,0 +1,8 @@
+<tr>
+    <td class="main">
+      <%= link_to image_tag(post.blog_image_display(:thumb)), pitch_url(post.pitch) if post.pitch.featured_image %>
+      <%= link_to post.title, pitch_post_url(post.pitch, post) %></td>
+    <td> 
+      <%= link_to post.pitch.headline, pitch_url(post.pitch) %>
+    </td>
+</tr>

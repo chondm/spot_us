@@ -1,0 +1,26 @@
+%tr
+  %td.pitch
+    = link_to image_tag(pitch.featured_image.url(:thumb)), pitch_url(pitch)
+    PITCH:
+    = link_to h(pitch.headline), pitch_url(pitch)
+    - if pitch.unapproved?
+      %br/
+      .status{:id => pitch.id} Pending approval
+  %td.created= pitch.created_at.to_s(:date)
+  %td.donations
+    = render :partial => "shared/table_progress_bar", :locals => {:pitch => pitch}
+  %td.actions
+    - if pitch.editable_by?(current_user)
+      .action= link_to "Edit", edit_pitch_url(pitch)
+    - if pitch.can_be_accepted?
+      .action= link_to "Accept", accept_myspot_pitch_url(pitch), :method => :put, :confirm => "Are you sure you want to accept this pitch, even though it isn't fully funded?"
+    - if pitch.story
+      .action= link_to "Go to Draft", story_path(pitch.story)
+    - if pitch.funded? || pitch.accepted?
+      - unless pitch.story.nil?
+        - if pitch.story.draft? 
+          .action= link_to "Submit Draft", edit_story_url(pitch.story)
+        - elsif pitch.story.published?
+          .action= link_to "View Published Story", story_url(pitch.story)
+    = link_to 'Make blog post', new_pitch_post_path(pitch)
+

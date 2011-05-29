@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+
+	<head>
+		<%= render :partial => 'layouts/head' %>
+	</head>
+
+	<body>
+		
+		<!-- START HEADER -->
+		<div class='upperWrapper'>
+			<div class='innerWrapper'>
+				<%= render :partial => "layouts/header" %>
+			</div>
+		</div>
+		<!-- END HEADER -->
+		
+		<%if flash[:notice] || flash[:success] || flash[:error]%>
+			<div class="flashError">
+				<div class='innerWrapper'>
+					<div>
+						<%= flash[:error] if flash[:error]%>
+						<%= flash[:notice] if flash[:notice]%>
+						<%= flash[:success] if flash[:success]%>					
+					</div>
+				</div>
+			</div>
+		<%end%>
+		
+		<!-- Only show middle header if a partial is defined for the particular controller... -->
+		<%if File.exists?("#{RAILS_ROOT}/app/views/#{params[:controller]}/_header.html.erb")%>
+			<div class='middleWrapper'>
+				<div class='innerWrapper'>
+					<%if @page_not_found%>
+						<%= render :partial => "pages/header"%>
+					<%else%>
+						<%= render :partial => "header" %>
+					<%end%>
+				</div>
+			</div>
+		<%end%>
+
+		<div class='lowerWapper'>
+			<div class='innerWrapper'>
+				<div class="contentContainer">
+					<%= yield %>
+				</div>
+			</div>
+		</div>
+
+		<div class="bottomWrapper">
+			<%= render :partial => 'layouts/footer' %>
+		</div>
+
+		<!-- START HELPER METHODS -->
+		<%= render :partial => 'layouts/google_analytics' if RAILS_ENV == "production" %>
+		<%#= render :partial => 'layouts/splash' %>
+		<%= render :partial => 'layouts/get_satisfaction' if GS_APP && !defined?(@hide_gs)  %>
+		<%= render :partial => 'layouts/social_notifier' if cookies[:social_notifier] and current_user and @notify_object %>
+		<%= render :partial => 'shared/hovers' %>
+
+		<% if session[:show_default_answers] %>
+			<script>
+				jQuery(document).ready(function($){
+					jQuery.facebox({ajax: '<%= default_answers_cca_path(Cca.find_by_id(session[:show_default_answers]), {:only_path=>false}).gsub("https", "http")%>'});
+				});
+			</script>
+		<% end %>
+
+		<%= yield :bottom %>
+
+	</body>
+</html>

@@ -1,0 +1,29 @@
+Dear <%=@user.first_name%>,
+
+Welcome to Spot.Us and thanks for joining our effort to produce
+community funded journalism.
+
+We apologize for the slight delay in approving your account. News
+Organizations are the ONLY type of account that we grant special
+privileges to and as a result we are very careful about who is given a
+"news organization" account on Spot.Us
+
+But now that you are in - we work for you!
+
+If you have any questions - don't hesitate to contact David Cohn:
+David@spot.us
+
+In the meantime - here are some ideas on how to get started.
+
+Start a pitch: You could use this to raise money for a freelancer.
+Perhaps a freelance reporter has already created a pitch that would 
+be of interest to you. Your donation could turn it into
+a reality.
+
+You can get more ideas at our FAQ: http://spot.us/pages/about#faq_news_organization
+
+Sincerely,
+David Cohn
+Spot.Us
+
+<%= render :partial=>"footer", :locals=>{ :email=>@user.email }%>

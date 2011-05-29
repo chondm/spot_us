@@ -1,0 +1,33 @@
+.users
+  .creator
+    .person_avatar
+      = link_to((image_tag news_item.user.photo.url(:thumb)), profile_path(news_item.user))
+    .user_news_item_info
+      %h4.reg-line-height
+        = news_item.class
+        by
+        = link_to(h(news_item.user.full_name), profile_path(news_item.user))
+      .reg-line-height
+        %span.quiet Located in
+        = h news_item.user.network_and_category
+    .reg-line-height
+      - if news_item.topics.any?
+        %span.quiet Filed under
+        = show_topics(news_item)
+        == in the #{news_item.network.display_name} network.
+  / .tweet_meme
+  /   = javascript_tag "tweetmeme_source = 'spotus';"
+  /   = javascript_include_tag "http://tweetmeme.com/i/scripts/button.js"
+  - if news_item.peer_reviewer
+    %br/
+    %hr/
+    .fact_checker
+      .person_avatar
+        = link_to((image_tag news_item.peer_reviewer.photo.url(:thumb)), profile_path(news_item.peer_reviewer))
+      %h5.reg-line-height
+        Peer Review Editor
+      = link_to(h(news_item.peer_reviewer.full_name), profile_path(news_item.peer_reviewer))
+      .reg-line-height.small
+        %span.quiet Located in
+        = h news_item.user.network_and_category
+.double_content_border

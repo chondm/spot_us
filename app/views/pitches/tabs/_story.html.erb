@@ -1,0 +1,73 @@
+<%= render :partial => "/pitches/pitch_head" %>
+<div class="pitchLeftContainer">
+	<h2>Story: <%=h @pitch.story.headline%></h2>
+	
+	<% if !@story.video_embed.blank? %>
+		<div class="videoContainer">
+			<%= transform_embed_code(@story.video_embed, 670, 320) %>
+		</div>
+	<% elsif @story.featured_image? %>
+		<div class="largerFeaturedImage">
+			<%= image_tag(@story.featured_image.url(:larger_featured_image)) %>
+		</div>
+	<%end%>
+
+	<%unless @story.extended_description.blank?%>
+		<div class="shortDescription">
+			<%= @story.extended_description.strip_double_spaces %>
+		</div>
+	<%end%>
+
+	<%unless @story.external_links.blank?%>
+		<h2>External Links</h2>
+		<%= @story.external_links.strip_double_spaces %>
+	<%end%>
+
+	<%unless @pitch.keywords.blank? %>
+		<h2>Keywords</h2>
+		<%= @pitch.keywords %>
+	<%end%>
+
+	<%unless @story.license.blank?%>	
+		<h2>License</h2>
+		<%= @story.license.strip_double_spaces %>
+	<%end%>
+	
+	<div class="discussionContainer">
+		<h2>Discussion</h2>
+		<% if !@story.comments.any? %>
+			<p>There are no comments yet, be the first!</p>
+		<% else %>
+			<% @story.comments.each do |comment| %>
+				<% apply_fragment ['pitch_comments_alt_', @story, comment] do%>
+					<a name="<%=comment.id%>"/>
+					<ul>
+						<li>
+							<div class="commentMetadata">
+								<%= link_to image_tag(comment.user.photo(:thumb), :class => "avatar"), profile_path(comment.user) %>
+								<span class="date"><%= medium_date(comment.created_at) %></span>
+								<span><%= link_to comment.user.full_name, profile_path(comment.user) %></span>
+							</div>
+							<p><%= comment.body %></p>
+						</li>
+					</ul>
+				<% end %>	
+			<% end %>
+		<% end %>
+		<div class="postComment">
+			<h3>Add to this discussion</h3>
+			<div class="formContainer">
+				<div class="formBody">
+					<% form_for [@story, Comment.new(:commentable => @story)], :html => { :id => 'comments_form', :class => "auth" } do |f| %>
+						<%= render :partial => 'comments/form', :locals => {:f => f} %>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<%= publishing_workflow_buttons_for(current_user) if logged_in? %>
+	
+	
+</div>
+<%=render :partial => "pitches/sidebars/narrow"%>

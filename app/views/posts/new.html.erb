@@ -1,0 +1,12 @@
+<div id="spotus_form">
+	<h2>Create A Story Update</h2>
+	<% unless @post.errors.empty? %>
+		<% content_for :error do %>
+			<%= error_messages_for :post %>
+		<% end %>
+	<% end %>
+
+	<% form_for([@pitch, @post], :html => { :multipart => true }) do |f| %>
+		<%= render :partial => 'form', :locals => {:f => f} %>
+	<% end %>
+</div>

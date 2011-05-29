@@ -1,0 +1,20 @@
+= content_for :head do
+  :javascript
+    $(function(){
+      $(".admin_tab").removeClass("hilited");
+      $("#networks_tab").addClass("hilited");
+    });
+
+= render :partial => "/admin/admin_header"
+
+%h1 Edit Network
+- form_for([:admin, @network]) do |f|
+  = render :partial => 'form', :locals => {:f => f, :network => @network}
+
+  = f.render_associated_form(@network.categories, :new => 1)
+
+  = f.submit
+
+%p
+%hr
+  = link_to 'All networks', admin_networks_path

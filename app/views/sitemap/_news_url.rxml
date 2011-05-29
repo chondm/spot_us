@@ -1,0 +1,26 @@
+#<loc>http://www.example.org/business/article55.html</loc>
+#<n:news>
+#  <n:publication>
+#    <n:name>The Example Times</n:name>
+#    <n:language>en</n:language>
+#  </n:publication>
+#  <n:access>subscription</n:access>
+#  <n:genres>pressrelease, blog</n:genres>
+#  <n:publication_date>2008-12-23</n:publication_date>
+#  <n:title>Companies A, B in Merger Talks</n:title>
+#  <n:keywords>business, merger, acquisition, A, B</n:keywords>
+#  <n:stock_tickers>NASDAQ:A, NASDAQ:B</n:stock_tickers>
+#</n:news>
+
+xml.loc(url.gsub('www.',''))
+xml.n :news do
+  
+  xml.n :publication do
+    xml.n :name, "Spot.Us"
+    xml.n :language, "en"
+  end
+  
+  xml.n :publication_date, w3c_date(item_date) unless item_date.blank?
+  xml.n :title, title
+
+end

@@ -1,0 +1,60 @@
+<div id="profile_user">
+   <%= render :partial => 'shared/user', :locals => { :user => @profile } %>
+</div>
+<% if @profile.topics.any? %>
+   <div class="profile_section">
+      <strong><%= h @profile.first_name %></strong>
+         has shown interest in 
+       <%= show_topics(@profile) %>
+       <br/>
+   </div>
+<% end %>
+
+<% unless @profile.about_you.blank? %>
+   <div class="profile_section">
+      <h3>About <%= @profile.full_name %></h3>
+      <%= sanitize @profile.about_you %>
+   </div>
+
+<% end %>
+<% if @profile.is_a?(Reporter) && @profile.samples.any? %>
+   <div class="profile_section">
+      <h3>Work Samples</h3>
+     <% for sample in @profile.samples %>
+         <% if !sample.url.blank? %>
+           <%= link_to h(sample.title), sample.url %>
+         <% else %>
+            <%= h sample.title %>
+         <% end %>
+         <%= sanitize(sample.description) %>
+      <% end %>
+   </div>
+<% end %>
+<% if @profile.is_a?(Reporter) && @profile.jobs.any? %>
+   <div class="profile_section">
+     <h3>Work History</h3>
+     <% for job in @profile.jobs %>
+         <% if !job.url.blank? %>
+            <%= link_to h(job.title), job.url %>
+         <% else %>
+            <%= h job.title %>
+         <% end %>
+         <%= sanitize(job.description) %>
+      <% end %>
+   </div>
+<% end %>
+<% if current_user && current_user.is_a?(Admin) %>
+   <div class="profile_section">
+     <h3>Admin</h3>
+     <%=link_to 'Show', admin_user_path(@profile)%> | 
+     <%=link_to 'Edit', edit_admin_user_path(@profile)%> | 
+     <%=link_to 'Destroy', admin_user_path(@profile), :confirm => 'Are you sure?', :method => :delete%> | 
+     <%=link_to 'Log in as', log_in_as_admin_user_path(@profile)%> 
+     <%unless @profile.is_a?(Sponsor)%>
+		| <%=link_to 'Promote to Sponsor', promote_to_sponsor_admin_user_path(@profile)%>
+	<%else%>
+		| <strong>Is a sponsor</strong>
+	<%end%>
+   </div>
+<% end %>
+

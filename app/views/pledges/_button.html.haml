@@ -1,0 +1,25 @@
+- if current_user && current_user.has_pledge_for?(news_item)
+  = render :partial => "pledges/added", :locals => {:tip => news_item}
+- else
+  %div{:id => "inline_pledge_form_#{news_item.id}"}
+    %div{:id => "pledge_button_#{news_item.id}"}
+      - form_for Pledge.new(:tip => news_item, :amount => Donation::DEFAULT_AMOUNT), :html => {:class => 'auth'} do |f|
+        %div
+          = f.hidden_field :amount
+          = f.hidden_field :tip_id
+          = image_submit_tag("pledge_default.png")
+
+    %div.inline_pledge{:style => "display:none", :id => "pledge_custom_#{news_item.id}"}
+      - form_for Pledge.new(:tip => news_item), :html => { :id => "custom_pledge_#{news_item.id}", :class => 'auth' } do |f|
+        .float_left
+          = f.hidden_field :tip_id
+          = f.text_field :amount
+        .float_right= image_submit_tag("pledge.png")
+        .clear
+    / .small.uppcased_button_text
+    /  =# link_to_function "OR PLEDGE ANOTHER AMOUNT &raquo;", %{jQuery("#pledge_button_#{news_item.id}, #pledge_custom_#{news_item.id}").toggle();}
+    /  .double_content_border
+    = render :partial => "shared/hey_reporters", :locals => {:tip => news_item}
+
+ 
+

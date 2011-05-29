@@ -1,0 +1,14 @@
+<% if items.blank? %>
+	<div class="noItemsMessage">
+		<%= no_items_message %>
+	</div>
+<% else %>
+	<ul class="storyGrid">
+		<% unless defined?(template_name) %>
+			<%= render :partial => items %>
+		<% else %>
+			<%= render :collection => items, :partial => template_name %>
+		<% end %>
+	</ul>
+	<%= will_paginate items if !defined?(show_pagination) || show_pagination%>
+<%end%>

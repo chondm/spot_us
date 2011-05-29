@@ -1,0 +1,26 @@
+Dear <%=@to%>,
+
+The pitch on Spot.Us is a success!!!!!!  Congrats!!!!
+
+<%= @pitch.headline %>
+<%= pitch_url(@pitch) %>
+
+The work isn't done though. Now the reporter and the peer-review editor
+are going to work together to do the actual reporting.
+
+You can watch this happen by keeping your eye on the original pitch
+page, especially the blog and comment sections.
+
+Click "join the reporting team" if you want to help out in the reporting.
+
+We will let you know when this reporting has been turned into a real
+story. In the meantime, we will also try and partner with local news
+organizations to publish the final investigation, possibly even
+recouping you some of your original donation.
+
+If you have any questions - don't hesitate to contact us:  info@spot.us
+
+Sincerely,
+David Cohn
+
+<%= render :partial=>"footer", :locals=>{ :email=>@email, :subscriber=>@subscriber }%>

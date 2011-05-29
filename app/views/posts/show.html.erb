@@ -1,0 +1,20 @@
+<%= render :partial => "pitches/pitch_head" %>
+<% @title = "Spot.us - Pitch: #{h @pitch.headline} - Update: #{h @post.title}" %>
+
+<%=render :partial => "pitches/tabs"%>
+
+<% if @subscriber && @subscriber.errors.any? %>
+	<div class="error">
+		<%= error_messages_for :subscriber %>
+	</div>
+<% end %>
+
+<%#=render :partial => "admin_menu"%>
+
+<div class="pitchContainer">
+	<div class="updateContainer">
+		<%= render :partial => "/shared/social_sharing", :locals => { :content_url => pitch_post_path(@pitch, @post, {:only_path=>false}) }%>
+		<%= render :partial => 'pitches/post_in_list', :locals => { :post => @post }%>
+	</div>
+	<%=render :partial => "pitches/sidebars/narrow"%>
+</div>

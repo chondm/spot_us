@@ -1,0 +1,32 @@
+Dear <%=@user.first_name%>,
+
+Welcome to Spot.Us and thanks for joining our effort to produce
+community powered reporting.
+
+You can login here: http://spot.us/session/new
+
+In the meantime, here are some ideas on how to get started:
+
+1. Start a pitch:  Traditionally you would pitch editors, because they
+were the only people that had a freelance budget.  At Spot.Us community
+members band together to build a budget of their own.  Now you can pitch
+the public to do the journalism you want! 
+
+2. Check out other stories that are up on Spot.Us and see if you want to support any of them.
+
+3. Click "Free Credits" and help fund a story without spending a dime!
+
+Here are answers to some FAQ's
+
+http://spot.us/pages/about#faq_reporter
+
+We are very hands on and passionate about making sure that the
+information needs of our communities are met.  We work for you!!!!
+
+Don’t hesitate to contact us:  info@spot.us
+
+Sincerely,
+David Cohn
+Spot.Us
+
+<%= render :partial=>"footer", :locals=>{ :email=>@user.email }%>

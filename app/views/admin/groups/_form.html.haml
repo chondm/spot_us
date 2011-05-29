@@ -1,0 +1,16 @@
+.field
+  = f.label :name
+.field
+  = f.text_field :name
+%br/
+.field
+  = f.label :description
+.field
+  = ckeditor_textarea("group", "description", :toolbar => 'Basic', :width => '500px', :height => '200px')
+%br/
+.field
+  = f.label :image
+.field
+  = f.file_field :image
+%br/
+= f.submit

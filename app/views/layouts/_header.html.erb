@@ -1,0 +1,71 @@
+<div class="headerContainer">
+	<%if @current_network && @current_network.name=="la"%>
+		<div class="logoContainerUSC">
+			<a href="/" title="Spot.us - Community Funded Reporting in Partnership with USC">
+				<span>Spot.us - Community Powered Reporting in Partnership with USC</span>
+			</a>
+		</div><!--end logo container-->
+	<%else%>
+		<div class="logoContainer">
+			<a href="/" title="Spot.us - Community Funded Reporting">
+				<span>Spot.us - Community Powered Reporting</span>
+			</a>
+		</div><!--end logo container USC-->
+	<%end%>
+	<ul class="rightHeaderContainer">
+		<li>
+			<div class="searchBox">
+				<% form_tag(search_path, :method => "post") do %>
+					<%= text_field_tag(:q) %>
+				<% end %>
+			</div>
+		</li><!--end searchBox-->
+		<li>	
+			<ul class="socialMenu">
+				<li><a href="http://blog.spot.us"><img src="/images/new/blog_w18.png"/></a></li>
+				<li><a href="http://www.flickr.com/photos/29792566@N08/"><img src="/images/new/flickr_w18.png"/></a></li>
+				<li><a href="http://www.twitter.com/spotus"><img src="/images/new/twitter_w18.png"/></a></li>
+				<li><a href="http://www.facebook.com/pages/SpotUs/74947774190"><img src="/images/new/facebook_w18.png"/></a></li>
+			</ul><!--end socialMenu-->
+		</li>
+		<li>
+			<ul class="loginMenu">
+				<li><a href="#" rel='nofollow' id='hoverAnchorLearnMore'>Learn More</a></li>
+				<li class="menuSeparator">&nbsp;</li>
+				<%unless current_user%>
+					<li class="menuSeparator">&nbsp;</li>
+					<li class="fbConnect"><a href="/auth/facebook" title="Login or Register via Facebook"><img src="/images/new/fbConnect.png"/></a></li>
+					<li><a href="/session/new">Join</a> or <a href="/session/new">Log in</a></li>
+				<%else%>
+					<li class="menuSeparator">&nbsp;</li>
+					<li><%=link_to 'Logout', '/logout', {:class=>'logoutLink'}%></li>
+					<li class="menuSeparator">&nbsp;</li>
+					<%= render :partial => "layouts/cart"%>
+					<li>Welcome back <%=link_to current_user.first_name, myspot_profile_path%></li>
+				<%end%>
+			</ul><!--end loginMenu-->
+		</li>
+		<li class='headerMenuContainer'>
+			<ul class="headerMenu">
+				<li><%= facebox_login_link_to("Start a story", new_pitch_path) %></li>
+				<li><a href="/stories/unfunded">Find a story</a></li>
+				<li class="last"><%=link_to "Earn Credits", @cca_link%></li>
+			</ul><!--end header menu-->
+		</li>
+	</ul><!--end rightContainer-->
+</div>
+
+<% content_for :bottom do %>
+	<!-- START - hover list of learn more -->
+	<ul class='hoverContainer learnMore' id='hoverContainerLearnMore' style="display:none;">
+		<li><a href="/pages/about" title="About Spot.Us">About Spot.Us</a></li>
+		<li><a href="" id="help_newsletter" title="Newsletter" rel="nofollow">Join newsletter</a>
+		<li><a href="http://blog.spot.us">Spot Blog</a></li>
+		<li><a href="/pages/examples" title="Projects and Partners">Projects and Partners</a></li>
+		<li><a href="/pages/press" title="Press">Press</a></li>
+		<li><a href="/pages/sponsors" title="Sponsor">Sponsorship</a></li>
+		<li><%=facebox_login_link_to("Suggest a Story", "/tips/new")%></li>
+		<li><a href="/contributors" title="Spot.Us Community">Spot.Us Community</a></li>
+	</ul>
+	<!-- END - hover list of learn more -->
+<% end %>

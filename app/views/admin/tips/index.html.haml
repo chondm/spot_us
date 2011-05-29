@@ -1,0 +1,29 @@
+= content_for :head do
+  :javascript
+    $(function(){
+      $(".admin_tab").removeClass("hilited");
+      $("#tips_tab").addClass("hilited");
+    });
+
+= render :partial => "/admin/admin_header"
+
+%h2 Tips
+.box
+  %table
+    %th Headline
+    %th Created At
+    %th Network
+    %th Pledged
+    %th Supporters
+    %th Actions
+    
+    - for tip in @tips
+      %tr
+        %td= link_to h(tip.headline), tip_url(tip)
+        %td= tip.created_at.to_s(:date)
+        %td= tip.network_and_category
+        %td= number_to_currency(tip.total_amount_pledged)
+        %td
+          = tip.supporters.map(&:email).join(', ')
+        %td=link_to 'Destroy', admin_tip_path(tip), :confirm => 'Are you sure?', :method => :delete
+= will_paginate @tips
